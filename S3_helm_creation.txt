@@ -1,0 +1,68 @@
+Creating repo 
+to install helm s3 plugins 
+
+$ helm plugin install https://github.com/hypnoglow/helm-s3.git
+helm s3 init s3://ug-helm-demo-bucket/charts
+
+helm repo add demo s3://ug-helm-demo-bucket/charts
+helm s3 push --relative ./hellow-rorld-0.1.0.tgz  demo
+
+Now to use below command
+helm repo add <repo_name> s3://ug-helm-demo-bucket/charts
+helm search repo <repo_name>
+
+
+
+To automate 
+1] check plugin is there or nor 
+
+
+if helm plugin ls | awk '{print $1}' | grep -iq s3; then
+  echo plugin is present.
+else
+  echo installing helm s3 plugins ....
+  helm plugin install https://github.com/hypnoglow/helm-s3.git
+fi
+
+read -p "Provide s3 Bucket name: " bucket_name
+
+#read -p "Chart name: " chart_name
+
+#read -p "Chart Version: " chart_version
+
+read -p "helm package path: " package_path
+
+helm s3 init s3://${bucket_name}/charts
+helm repo add charts s3://${bucket_name}/charts
+helm s3 push --relative ${package_path}  charts
+ 
+
+
+
+below is script:
+
+#!/bin/bash
+
+if helm plugin ls | awk '{print $1}' | grep -iq s3; then
+  echo plugin is present.
+else
+  echo installing helm s3 plugins ....
+  helm plugin install https://github.com/hypnoglow/helm-s3.git
+fi
+
+read -p "Provide s3 Bucket name: " bucket_name
+
+#read -p "Chart name: " chart_name
+
+#read -p "Chart Version: " chart_version
+
+read -p "helm package path: " package_path
+
+helm s3 init s3://${bucket_name}/charts
+helm repo add charts s3://${bucket_name}/charts
+helm s3 push --relative ${package_path}  charts
+
+echo "repo url is : s3://${bucket_name}/charts"
+
+
+

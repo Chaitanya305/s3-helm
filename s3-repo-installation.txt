@@ -1,0 +1,59 @@
+1] Create ec2 instnace :-  install aws cli install minukube and install helm in it
+2] provide ssm acces and s3 bucket acces to read and write things in it
+
+3] create helm demo repo to puhs it to s3 bucket in aws 
+
+
+
+
+for script:
+helm plugin ls | awk 'NR==2 {print $1}'
+below is correct one
+helm plugin ls | awk '{print $1}' | grep -i s3
+
+
+How we did it 
+create ec2 instnace with attaching ssm role to it :- this role has ssm and s3 acces policy attached
+install minikube in your machine
+first install aws cli 
+then install helm 
+once all install create bucket
+create s3 bucket 
+then run helm repo creation script
+helm repo rm charts  :- to deleet repo
+helm search repo <repo_name>
+***who ever want to acces this repo need s3 helm plugin install
+and also some from outside ec2 should have aws configure for iam user, so if user has bucket permission then he can acces it. even though public acces is blocked
+***
+
+to install aws cli
+
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+
+
+install docker in amazon linux 2023
+sudo yum update -y
+sudo yum install -y docker
+sudo service docker start
+sudo gpasswd -a ec2-user docker
+
+
+to install minikube
+
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64
+minikube start
+
+
+to install kubectl on aamzon-linux-2023
+sudo curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.31.0/2024-09-12/bin/linux/amd64/kubectl
+sudo chmod +x ./kubectl
+sudo mkdir -p $HOME/bin && sudo cp ./kubectl $HOME/bin/kubectl && export PATH=$HOME/bin:$PATH
+
+To install helm
+
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
