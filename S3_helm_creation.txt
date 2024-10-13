@@ -65,4 +65,7 @@ helm s3 push --relative ${package_path}  charts
 echo "repo url is : s3://${bucket_name}/charts"
 
 
+#we can also acces it using below command only from where your accesing it, you should have acces to bucket.
+helm repo add demo https://ug-demo-helm-bucket.s3.amazonaws.com/charts
+
 
